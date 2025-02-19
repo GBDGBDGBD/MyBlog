@@ -1,9 +1,9 @@
 
-// src/components/Home.js
+// src/components/ArticleList.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Home = () => {
+const ArticleList = () => {
     return (
         <section className="blog-content">
             <article className="post">
@@ -23,4 +23,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default ArticleList;

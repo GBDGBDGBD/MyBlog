@@ -1,31 +1,32 @@
-// src/components/Post.js
-import React from 'react';
-import { useParams } from 'react-router-dom'; // 引入 useParams
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 
-const Post = () => {
-    // 使用 useParams 获取路由参数
-    const { id } = useParams();
+const Article = () => {
+    const { id } = useParams();  // 获取文章的 ID
+    const [content, setContent] = useState('');
 
-    // 模拟文章数据
-    const posts = {
-        1: {
-            title: '计算机网络基础',
-            content: '计算机网络是指将分布在不同地理位置的计算机通过通信链路连接起来，实现资源共享和信息交流的系统...'
-        },
-        2: {
-            title: '数据结构与算法入门',
-            content: '数据结构和算法是计算机科学的基础。通过高效的数据结构，可以优化算法的执行效率...'
+    useEffect(() => {
+        // 动态导入 Markdown 文件
+        if (id) {
+            import(`../articles/${id}.md`)  // 动态导入指定 ID 的 Markdown 文件
+                .then(module => {
+                    setContent(module.default);  // module.default 是文件的内容
+                })
+                .catch(error => {
+                    console.error('加载文章失败:', error);
+                    setContent('文章不存在');
+                });
         }
-    };
-
-    const post = posts[id]; // 根据 id 获取对应的文章数据
+    }, [id]);
 
     return (
         <section className="post-detail">
-            <h2>{post?.title}</h2> {/* 使用可选链（?.）避免 post 为 undefined 时报错 */}
-            <p>{post?.content}</p>
+            <h2>文章内容</h2>
+            <ReactMarkdown>{content}</ReactMarkdown>
+            <Link to="/" className="back-link">返回首页</Link>
         </section>
     );
 };
 
-export default Post;
+export default Article;
